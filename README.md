@@ -13,6 +13,7 @@
 - vscode
 - make
 - sqlc: genarate golang codes from SQL queries
+- golang-migrate: migrate database `brew install golang-migrate`
 ## Use Docker:
 ```
 docker run
@@ -61,9 +62,34 @@ Start with
 migrate create -ext sql -dir db/migration -seq init_schema
 
 ```
+## SQLC
+- Have many choose `database/sql | gorm | sqlx | sqlc`
+    - Prioritize: sqlc > sqlx (fast ? failure won't occur until runtime) > gorm (slow) > database/sql (easy make mistakes)
+- Very fast & easy to use
+- Automatic code genaretion `gen golang using standard lib database/sql => fast`
+- Catch SQL query errors before genarating code
+- Full support Postgres. MySQL is experimental
+### Install sqlc
+```
+brew install sqlc # macos
+sudo snap install sqlc # ubuntu
+```
+Usage:
+```
+sqlc help
+
+- compile: Statically check SQL for syntax and type errors
+- generate: Generate source code from SQL
+- init: Create an empty sqlc.yaml settings file
+```
+# ----------------------------------------------
 # How to run
 ```
+# Setup database
 make postgres # create container docker postgres
 make createdb # create db simple_bank in docker
 make migrateup # create structure simple_bank db
+
+# Setup sqlc
+sqlc init
 ```
