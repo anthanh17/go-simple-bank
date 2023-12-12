@@ -112,6 +112,16 @@ sqlc help
 
 # ----------------------------------------------
 
+# Command exc db
+
+```
+docker exec -it postgres12 psql -U root
+\l
+\c simple_bank
+\dt
+select * from accounts;
+```
+
 # How to run
 
 ```
