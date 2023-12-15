@@ -82,20 +82,22 @@ migrate create -ext sql -dir db/migration -seq init_schema
 - Catch SQL query errors before genarating code
 - Full support Postgres. MySQL is experimental
 
-# What is a db transaction?
+# A clean way to implement database transaction in Golang
+
+## What is a db transaction?
 
 - A single unit of work
-- often made up of multiple db operations
-- Ex: We want to transfer `10 USD` from `account 1` to `account 2`
+- Often made up of multiple db operations
+- Ex: In our simple bank, we want to transfer `10 USD` from `account 1` to `account 2`
   - This transaction comprises 5 operations:
     - `1`.First, Create a transfer record with amount = 10
-    - `2`.Secound, Create an account entry for account 1 with amount = -10, since money is moving out of this account.
-    - `3`.Create another account entry record for account 2 with amount = +10, because money is moving in to this account.
-    - `4`.Then we update the balance of account 1 by subtracting 10 from it
-    - `5`.And finally we update the balance of account 2 by adding 10 to it
+    - `2`.Secound, Create an account entry record for `account 1` with amount = `-10`, since money is moving out of this account.
+    - `3`.Create another account entry record for `account 2` with amount = `+10`, because money is moving in to this account.
+    - `4`.Then we update the balance of `account 1` by `subtracting 10` from it
+    - `5`.And finally we update the balance of `account 2` by `adding 10` to it
     - `=> This is transaction that we're going to implement.`
 
-# Why do we need db transaction?
+## Why do we need db transaction?
 
 There are 2 main reasons:
 
@@ -113,7 +115,7 @@ There are 2 main reasons:
 - `Durability (D)`:
   - Which means that all data written by a successful transaction must stay in a persistent storage and cannot be lost, even in case of system failure
 
-# How to run SQL database transaction?
+## How to run SQL database transaction?
 
 ```
 BEGIN;
