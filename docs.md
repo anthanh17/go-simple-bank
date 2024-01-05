@@ -2,42 +2,7 @@ How to develop
 
 # Setup
 
-### 1. Install sqlc
-
-```
-brew install sqlc # macos
-sudo snap install sqlc # ubuntu
-```
-
-Usage:
-
-```
-sqlc help
-
-- compile: Statically check SQL for syntax and type errors
-- generate: Generate source code from SQL
-- init: Create an empty sqlc.yaml settings file
-```
-
-### 2. How to write & run database migration in Golang
-
-Usage:
-
-```
-migrate -help
-
-- create: Can use to create new migration files
-- goto: Will migrate the scheme ti a specific version
-- up/down: Apply all or N up/down migrations
-```
-
-Start with
-
-```
-migrate create -ext sql -dir db/migration -seq init_schema
-
-```
-
+### 1. Setup docke database postgress
 ## Use Docker:
 
 ```
@@ -92,7 +57,50 @@ docker exec -it postgres12 psql -U root
 select * from accounts;
 ```
 
-## SQLC
+### 2. How to write & run database migration in Golang
+Install:
+```
+brew install golang-migrate
+migrate -version
+```
+
+Usage:
+
+```
+migrate -help
+
+- create: Can use to create new migration files
+- goto: Will migrate the scheme ti a specific version
+- up/down: Apply all or N up/down migrations
+```
+
+```
+# step1: create new migration files
+migrate create -ext sql -dir db/migration -seq init_schema
+# step 2: apply all up migration
+migrate -path db/migration -database "postgresql://root:abc123@localhost:5432/simple_bank?sslmode=disable" -verbose up
+
+```
+Then we can use migaration file to up/down schema sql
+- First step: copy all sql file to init_schema_up.sql and write drop table code to init_schema_down.sql (revert the changes made by the init_schema_up.sql)
+
+### 3. Install sqlc
+
+```
+brew install sqlc # macos
+sudo snap install sqlc # ubuntu
+```
+
+Usage:
+
+```
+sqlc help
+
+- compile: Statically check SQL for syntax and type errors
+- generate: Generate source code from SQL
+- init: Create an empty sqlc.yaml settings file
+```
+## Why choose use to SQLC
 
 - Have many choose `database/sql | gorm | sqlx | sqlc`
   - Prioritize: sqlc > sqlx (fast ? failure won't occur until runtime) > gorm (slow) > database/sql (easy make mistakes)
@@ -100,6 +108,45 @@ select * from accounts;
 - Automatic code genaretion `gen golang using standard lib database/sql => fast`
 - Catch SQL query errors before genarating code
 - Full support Postgres. MySQL is experimental
+
+## How to use sqlc
+1. sqlc init # file config sqlc -> create sqlc.yaml
+2. create `schema.sql` in this case is *.sql file in "./db/migration/"
+```
+# Example
+CREATE TABLE authors (
+  id   BIGINT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name text    NOT NULL,
+  bio  text
+);
+```
+3. create `query.sql`
+```
+# Example
+-- name: GetAuthor :one
+SELECT * FROM authors
+WHERE id = ? LIMIT 1;
+
+-- name: ListAuthors :many
+SELECT * FROM authors
+ORDER BY name;
+
+-- name: CreateAuthor :execresult
+INSERT INTO authors (
+  name, bio
+) VALUES (
+  ?, ?
+);
+
+-- name: DeleteAuthor :exec
+DELETE FROM authors
+WHERE id = ?;
+```
+4. Final: run command gen code golang
+```
+sqlc generate
+```
+=============================================================
 
 # A clean way to implement database transaction in Golang
 

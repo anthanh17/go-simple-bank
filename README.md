@@ -27,9 +27,13 @@
 ```
 # Setup database
 make postgres  # 1. create container docker postgres
-make createdb  # 2. create db simple_bank in docker
-make migrateup # 3. create structure simple_bank db
-
+make createdb  # 2. create a new database simple_bank in postgres-docker
+```
+3. Then connect to it using `TablePlus application`
+```
+make migrateup # 4. create structure simple_bank db
+```
+```
 # Setup sqlc
 sqlc init
 # config sqlc.yaml
