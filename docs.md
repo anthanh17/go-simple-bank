@@ -1,5 +1,43 @@
 How to develop
 
+# Setup
+
+### 1. Install sqlc
+
+```
+brew install sqlc # macos
+sudo snap install sqlc # ubuntu
+```
+
+Usage:
+
+```
+sqlc help
+
+- compile: Statically check SQL for syntax and type errors
+- generate: Generate source code from SQL
+- init: Create an empty sqlc.yaml settings file
+```
+
+### 2. How to write & run database migration in Golang
+
+Usage:
+
+```
+migrate -help
+
+- create: Can use to create new migration files
+- goto: Will migrate the scheme ti a specific version
+- up/down: Apply all or N up/down migrations
+```
+
+Start with
+
+```
+migrate create -ext sql -dir db/migration -seq init_schema
+
+```
+
 ## Use Docker:
 
 ```
@@ -52,25 +90,6 @@ docker exec -it postgres12 psql -U root
 \c simple_bank
 \dt
 select * from accounts;
-```
-
-## How to write & run database migration in Golang
-
-Usage:
-
-```
-migrate -help
-
-- create: Can use to create new migration files
-- goto: Will migrate the scheme ti a specific version
-- up/down: Apply all or N up/down migrations
-```
-
-Start with
-
-```
-migrate create -ext sql -dir db/migration -seq init_schema
-
 ```
 
 ## SQLC

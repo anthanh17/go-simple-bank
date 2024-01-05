@@ -8,43 +8,27 @@
 
 ## Database design:
 
-- Design database schema: Design a SQL DB using dbdiagram.io
-- Generate SQL code to create the schema in target database engine: Postgress, MySQL
+- Design database schema: Design a SQL DB using `dbdiagram.io`
+
+-> Generate SQL code to create the schema in target database engine: Postgress, MySQL
 
 ## Setup:
 
-- wsl2
-- docker
+- wsl2 (option with windows)
 - go
 - vscode
+- docker
 - make
 - sqlc: genarate golang codes from SQL queries
 - golang-migrate: migrate database `brew install golang-migrate`
-
-### Install sqlc
-
-```
-brew install sqlc # macos
-sudo snap install sqlc # ubuntu
-```
-
-Usage:
-
-```
-sqlc help
-
-- compile: Statically check SQL for syntax and type errors
-- generate: Generate source code from SQL
-- init: Create an empty sqlc.yaml settings file
-```
 
 # How to run
 
 ```
 # Setup database
-make postgres # create container docker postgres
-make createdb # create db simple_bank in docker
-make migrateup # create structure simple_bank db
+make postgres  # 1. create container docker postgres
+make createdb  # 2. create db simple_bank in docker
+make migrateup # 3. create structure simple_bank db
 
 # Setup sqlc
 sqlc init
