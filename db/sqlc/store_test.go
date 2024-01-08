@@ -24,8 +24,8 @@ func TestTransferTx(t *testing.T) {
 		go func() {
 			result, err := store.TransferTx(context.Background(), TransferTxParams{
 				FromAccountID: account1.ID,
-				ToAccountID: account2.ID,
-				Amount: amount,
+				ToAccountID:   account2.ID,
+				Amount:        amount,
 			})
 
 			errs <- err
@@ -74,9 +74,8 @@ func TestTransferTx(t *testing.T) {
 		_, err = store.GetEntry(context.Background(), toEntry.ID)
 		require.NoError(t, err)
 
-		// check accounts
-		// TODO
-		
+		// TODO: check accounts balance
+
 	}
 
 }
