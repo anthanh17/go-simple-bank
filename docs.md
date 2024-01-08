@@ -3,6 +3,7 @@ How to develop
 # Setup
 
 ### 1. Setup docke database postgress
+
 ## Use Docker:
 
 ```
@@ -58,7 +59,9 @@ select * from accounts;
 ```
 
 ### 2. How to write & run database migration in Golang
+
 Install:
+
 ```
 brew install golang-migrate
 migrate -version
@@ -81,7 +84,9 @@ migrate create -ext sql -dir db/migration -seq init_schema
 migrate -path db/migration -database "postgresql://root:abc123@localhost:5432/simple_bank?sslmode=disable" -verbose up
 
 ```
+
 Then we can use migaration file to up/down schema sql
+
 - First step: copy all sql file to init_schema_up.sql and write drop table code to init_schema_down.sql (revert the changes made by the init_schema_up.sql)
 
 ### 3. Install sqlc
@@ -100,6 +105,7 @@ sqlc help
 - generate: Generate source code from SQL
 - init: Create an empty sqlc.yaml settings file
 ```
+
 ## Why choose use to SQLC
 
 - Have many choose `database/sql | gorm | sqlx | sqlc`
@@ -110,8 +116,10 @@ sqlc help
 - Full support Postgres. MySQL is experimental
 
 ## How to use sqlc
+
 1. sqlc init # file config sqlc -> create sqlc.yaml
-2. create `schema.sql` in this case is *.sql file in "./db/migration/"
+2. create `schema.sql` in this case is \*.sql file in "./db/migration/"
+
 ```
 # Example
 CREATE TABLE authors (
@@ -120,7 +128,9 @@ CREATE TABLE authors (
   bio  text
 );
 ```
+
 3. create `query.sql`
+
 ```
 # Example
 -- name: GetAuthor :one
@@ -142,10 +152,19 @@ INSERT INTO authors (
 DELETE FROM authors
 WHERE id = ?;
 ```
+
 4. Final: run command gen code golang
+
 ```
 sqlc generate
 ```
+
+## Unit testing Go database CRUD
+
+- In Golang, we have a convention to put test file in the same folder with the code
+- And the name of the test file should end with the `test suffix`
+- In the same folder: account.sql.go and account_test.go
+
 =============================================================
 
 # A clean way to implement database transaction in Golang
