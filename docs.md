@@ -215,3 +215,13 @@ BEGIN;
 ... # write a series of normal SQL queries
 ROLLBACK;
 ```
+
+# How to avoid Db deadlock?
+
+One of the hardest thing when working with database transaction is `locking` and `handling deadlock`
+
+=> The best way to deal with dealock is to avoid it.
+
+=> By that i mean we should fine-tune our queries in the transaction so that `deadlock won't have a chance to occur` or `at least minimize its chance of occurence.`
+
+=> avoid them by making sure that `out application always acquire locks in a consistent order`
