@@ -71,11 +71,11 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 		// Step 1: creates a transfer record
 		// Log ctx Name
 		fmt.Println(txName, "create transfer")
-		result.Transfer, err = q.CreateTransfer(ctx, CreateTransferParams{
+		result.Transfer, err = q.CreateTransfer(ctx, CreateTransferParams(TransferTxParams{
 			FromAccountID: arg.FromAccountID,
 			ToAccountID:   arg.ToAccountID,
 			Amount:        arg.Amount,
-		})
+		}))
 		if err != nil {
 			return err
 		}
