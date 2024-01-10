@@ -1,8 +1,12 @@
-# Login Google
+# Create account
 POST http://localhost:9000/accounts
 content-type: application/json
 
 {
-    "owner": "an.nguyen"
+    "owner": "nam.nguyen",
     "currency": "USD"
 }
+
+###
+# Get account
+GET http://localhost:9000/accounts/23
