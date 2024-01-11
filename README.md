@@ -38,6 +38,13 @@ make createdb  # 2. create a new database simple_bank in postgres-docker
 
 3. Then connect to it using `TablePlus application`
 
+- Name: postgres12
+- Host: 127.0.0.1
+- Port: 5432
+- User: root
+- Password: abc123
+- Database: root
+
 ```
 make migrateup # 4. create structure simple_bank db
 make server # 5. Run server
