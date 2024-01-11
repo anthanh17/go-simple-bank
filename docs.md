@@ -233,3 +233,30 @@ One of the hardest thing when working with database transaction is `locking` and
 => By that i mean we should fine-tune our queries in the transaction so that `deadlock won't have a chance to occur` or `at least minimize its chance of occurence.`
 
 => avoid them by making sure that `out application always acquire locks in a consistent order`
+
+# Mock DB for testing HTTP API in Go
+
+## Why mock database?
+
+1. It helps us to write independent tests more easily because each test will use its own separate mock db to store data, so there will be no conflicts between them.
+   > If you use a real db, all tests will read and write data to the same place, so it would be harder to avoid conflicts, especially in a big project with a large code base.
+2. Our tests will run much faster since they don't have to spend time talking to the database and waiting for the queries to run.
+   > All actions will be performed in memory, and within the same process.
+3. Very important reason for mocking database is: `It allows us to write tests that achieve 100% coverage`
+   > With a mock db, we can easily setup and test some edge cases, such as an unexpected error, or a connection lost, which would be impossible to achieve if we use a real db.
+
+## Is it good enough to test our API with a mock DB?
+
+`Yes absolutely!`
+
+Because our code that talks to the real DB is already tested carefully in the previous lectures.
+
+-> So all we need to do is: make sure that the mock db implement the same interface as the real db -> The everything will be working just fine when being put together.
+
+## How to mock?
+
+There are 2 ways to mock db:
+1. `USE FAKE DB` Implement a fake version of DB: store data un memory
+2. `USE DB STUBS: GOMOCK` Generate and build stubs that returns hard-coded values
+
+-> Use th the secound way

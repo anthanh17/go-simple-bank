@@ -14,3 +14,16 @@ GET http://localhost:9000/accounts/23
 ###
 # Get list account
 GET http://localhost:9000/accounts?page_id=1&page_size=5
+
+
+###
+# Transfer money
+POST http://localhost:9000/transfers
+content-type: application/json
+
+{
+    "from_account_id": 3,
+    "to_account_id": 4,
+    "amount": 5,
+    "currency": "AUD"
+}
