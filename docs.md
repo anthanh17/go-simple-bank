@@ -256,7 +256,17 @@ Because our code that talks to the real DB is already tested carefully in the pr
 ## How to mock?
 
 There are 2 ways to mock db:
+
 1. `USE FAKE DB` Implement a fake version of DB: store data un memory
 2. `USE DB STUBS: GOMOCK` Generate and build stubs that returns hard-coded values
 
 -> Use th the secound way
+
+## How to use
+
+```
+# 0. Install
+go get github.com/golang/mock/mockgen@v1.6.0
+# 1. Gen code
+mockgen -package mockdb -destination db/mock/store.go github.com/anthanh17/simplebank/db/sqlc Store
+```
