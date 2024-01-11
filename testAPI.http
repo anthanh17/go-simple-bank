@@ -10,3 +10,7 @@ content-type: application/json
 ###
 # Get account
 GET http://localhost:9000/accounts/23
+
+###
+# Get list account
+GET http://localhost:9000/accounts?page_id=30&page_size=20

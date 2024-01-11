@@ -22,6 +22,12 @@
 - sqlc: genarate golang codes from SQL queries
 - golang-migrate: migrate database `brew install golang-migrate`
 
+# Unit test
+
+```
+make test
+```
+
 # How to run
 
 ```
@@ -29,17 +35,10 @@
 make postgres  # 1. create container docker postgres
 make createdb  # 2. create a new database simple_bank in postgres-docker
 ```
+
 3. Then connect to it using `TablePlus application`
+
 ```
 make migrateup # 4. create structure simple_bank db
-```
-```
-# Setup sqlc
-sqlc init
-# config sqlc.yaml
-# define sql in folder db/query
-make sqlc # gen code golang from sql
-
-# unit test
-make test
+make server # 5. Run server
 ```

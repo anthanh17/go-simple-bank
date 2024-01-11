@@ -117,6 +117,14 @@ sqlc help
 
 ## How to use sqlc
 
+```
+# Setup sqlc
+sqlc init
+# config sqlc.yaml
+# define sql in folder db/query
+make sqlc # gen code golang from sql
+```
+
 1. sqlc init # file config sqlc -> create sqlc.yaml
 2. create `schema.sql` in this case is \*.sql file in "./db/migration/"
 
