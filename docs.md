@@ -270,3 +270,21 @@ go get github.com/golang/mock/mockgen@v1.6.0
 # 1. Gen code
 mockgen -package mockdb -destination db/mock/store.go github.com/anthanh17/simplebank/db/sqlc Store
 ```
+
+# How to securely store passwords? Hash password in Go with Bcrypt!
+
+`We should never ever store naked password!`
+
+-> Idea: hash it first & only store that hash value
+
+1. The password will be hashed using `brypt hashing function` to produce a hash value. Besides `the input password` bcrypt requires a `cost` parameter and `salt` parameter.
+
+- Cost: this value which will decide the number of key expansion rounds or iterations of the algorithm
+- Salt: this value is random, to be used in those iterations => which will help protect against the rainbow table attack
+
+-> Then the string will store in the database
+
+- When users login, how can we verify that the passoword that they entered is correct or not?
+  > 1. First we have to find the hashed password stored in the DB `by username`
+  > 2. Then we use `cost and salt` of that hashed passoword as the arguments to hash `the password users just entered` with bcrypt => the string
+  > 3. Compare the 2 hash values => verify

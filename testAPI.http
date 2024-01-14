@@ -27,3 +27,15 @@ content-type: application/json
     "amount": 5,
     "currency": "AUD"
 }
+
+###
+# Create users
+POST http://localhost:9000/users
+content-type: application/json
+
+{
+    "username": "test4",
+    "full_name": "Nguyen Van Test",
+    "email": "a64@gmail.com",
+    "password": "secret"
+}
