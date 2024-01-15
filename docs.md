@@ -288,3 +288,87 @@ mockgen -package mockdb -destination db/mock/store.go github.com/anthanh17/simpl
   > 1. First we have to find the hashed password stored in the DB `by username`
   > 2. Then we use `cost and salt` of that hashed passoword as the arguments to hash `the password users just entered` with bcrypt => the string
   > 3. Compare the 2 hash values => verify
+
+# JWT
+
+- The string is base64-encoded
+
+- 3 main parts and separation by "."
+
+1. Header:
+
+```
+{
+  "alg:: "HS256",
+  "typ": "JWT"
+}
+```
+
+- Decode this part: JSON object contains type and algorithm used to sign the token.
+
+2. Payload:
+
+```
+{
+  ...
+}
+```
+
+- Where we store information
+  > Keep in mind: That all data stored in JWT is only base64-encoded, not encrypted.
+  > => Don't need the secret/private key of the server in order to decode its content
+
+3. Verify signature
+
+- The idea: Only the server has the secret/private key to sign the token
+  > So if hacker attempts to create a fake token without the correct key -> Server will be easily detected in the verification process
+
+## JWT signing algorithms
+
+### 2 main categories:
+
+1. Symmetric-key algorithm: Thuật toán khóa đối xứng
+
+   > Trong đó cùng 1 secret key được sử dụng để ký và xác minh token
+
+   > Và vì chỉ có 1 key nên nó cần được giữ bí mật => Thuật toán này chỉ phù hợp để sử dụng cục bộ. (Nghĩa là dùng cho các service nội bộ , nơi secret key có thể được chia sẻ)
+
+   > HS256 = HMAC + SHA 256, HS384, HS512 2.
+
+   > Thuật toán khóa đối xứng hiệu quả và phù hợp với hầu hết các ứng dụng. Tuy nhiên, không thể sử dụng nó trong trường hợp có service bên ngoài muốn verify token
+
+2. Asymmetric digital signature algorithm: Thuật toán khóa bất đối xứng
+
+   > Trong thuật toán này, `có 1 cặp key` thay vì chỉ 1 key secret duy nhất
+
+   > `private key` sử dụng để ký token, `public key` dùng để verify token
+
+   > => Từ đó ta có thể dễ dàng share `public key` với bất kì service bên thứ 3 bên ngoài mà không sợ rò rỉ private key
+
+   > RS group, PS group, ES group: RS256, RS384, RS512 || PS256, PS384, PS512 || ES, ES. ES.
+
+## What's the problem of JWT
+
+1. Weak algorithms:
+   > JWT cung cấp quá nhiều các thuật toán để dev lựa chọn, bao gồm cả các thuật toán đã được biết là dễ bị tấn công (RSA PKCSv1.5 dễ bị tấn công) -> với dev ít exp sẽ không biến nên sử dụng thuật toán nào là tốt nhất
+2. Trivial Forgery:
+   > JWT làm cho việc giả mạo token trở nên tầm thường đến mức nếu bạn không cẩn thận trong quá trình triển khai or chọn thư viện triển khai kém cho prj của mình -> Hệ thống của bán sẽ dễ dàng trở thành mục tiêu dễ bị tấn công
+   > JWT nó bao gồm thuật toán ký trong header token -> hacker chỉ cần set trường "alg" trong header thành "none" để vượt qua quá trình verify chữ kí -> 1 số thư viện đã fixed vấn đề này -> đây là điểu nên cẩn thận
+   > 1 vấn đề nữa là hacker cố tình set thuật toán trong header thành đối xứng ví dụ: HS256 trong khi biết rằng server thực sự sử dụng thuật toán bất đối xứng
+
+=> JWT không phải là 1 tiêu chuẩn được thiết kê tốt.
+=> Sử dụng `PASETO - Platform-Agnostic Security Tokens`
+
+# PASETO - Platform-Agnostic Security Tokens
+
+1. Stronger algorithms:
+   > dev không phải chọn thuật toán nữa. Họ chỉ cần chọn phiên bản PASETO mà muốn dùng. Mỗi phiên bản được triển khai với 1 bộ mật mã mạn
+2. Non-trivial Forgery
+
+   > Header thuật toán không còn tồn tại nữa -> hacker không thế đặt nó thành "none" or buộc server sử dụng thuật toán mà nó đã chọn trong header.
+
+   > Everything is authenticated
+
+   > Encrypted payload for local use <symmetric key>
+
+3. An toàn và đơn giản hơn JWT
