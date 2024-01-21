@@ -39,3 +39,13 @@ content-type: application/json
     "email": "a64@gmail.com",
     "password": "secret"
 }
+
+###
+# Login users
+POST http://localhost:9000/users/login
+content-type: application/json
+
+{
+    "username": "test4",
+    "password": "secret"
+}
