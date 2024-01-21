@@ -35,7 +35,6 @@ func (maker *JWTMaker) CreateToken(username string, duration time.Duration) (str
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 	return jwtToken.SignedString([]byte(maker.secrectKey))
-
 }
 
 // VerifyToken checks if the token is valid or not
