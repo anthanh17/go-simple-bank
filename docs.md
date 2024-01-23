@@ -372,3 +372,45 @@ mockgen -package mockdb -destination db/mock/store.go github.com/anthanh17/simpl
    > Encrypted payload for local use <symmetric key>
 
 3. An toàn và đơn giản hơn JWT
+
+# Build a minimal Golang Docker image with a multistage Dockerfile
+
+## How to deloy an application
+
+1. Build image
+2. ship it -> Deloy the app to AWS
+
+`Bước 1:` Dockerize the application
+
+- Create Dockerfile
+
+```
+# 1. Xác định image cở sở để build app
+FROM golang:1.16-alpine3.13
+
+# 2. Sử dụng lệnh WORKDIR để khai báo thư mục làm việ hiện tại bên trong image
+WORKDIR /app
+
+# 3. Sau đó copy all các file cần thiết vào folder này
+COPY . .
+
+# 4. Chúng ta sẽ build ứng dụng của mình thành binary executable file.
+RUN go build -o main main.go
+
+# 5. Cách tốt nhất cũng là sử dụng EXPOSE để thông báo cho Docker rằng container sẽ lắng nghe trên cổng mạng được chỉ định trong runtime.
+EXPOSE 9000
+
+# 6. Xác định lệnh mặc định sẽ chạy khi container run
+CMD ["/app/main"]
+```
+
+```
+# Build dockerfile
+docker build -t simplebank:latest .
+
+docker images
+```
+
+> Ở đây nếu build ra sẽ thấy image khá nặng tầm 456mb
+
+> Khắc phục bằng cách sửa Dockerfile: write a lulti-stage Dockerfile để giảm dung lượng image xuôgns còn tầm 17.6mb
