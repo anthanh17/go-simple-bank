@@ -409,6 +409,8 @@ CMD ["/app/main"]
 docker build -t simplebank:latest .
 
 docker images
+# Run container
+docker run --name simplebank -p 9000:9000 -e GIN_MODE=release simplebank:latest
 ```
 
 > Ở đây nếu build ra sẽ thấy image khá nặng tầm 456mb
